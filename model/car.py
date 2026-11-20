@@ -1,7 +1,7 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_BRAKE_DECELERATION, CAR_REVERSE_ACCELERATION, CAR_MAX_REVERSE_SPEED
 )
 
 
@@ -30,3 +30,10 @@ class Car:
         rotated = pygame.transform.rotate(self.sprite, -self.angle)
         rect = rotated.get_rect(center=(int(self.x), int(self.y)))
         return rotated, rect
+
+    def brake_or_reverse(self) -> None:
+        """Freine si la voiture avance, sinon marche arrière plafonnée."""
+        if self.speed > 0.0:
+            self.speed = max(0.0, self.speed - CAR_BRAKE_DECELERATION)
+        else:
+            self.speed = max(-CAR_MAX_REVERSE_SPEED, self.speed - CAR_REVERSE_ACCELERATION)
