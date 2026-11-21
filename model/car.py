@@ -1,7 +1,8 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_BRAKE_DECELERATION, CAR_REVERSE_ACCELERATION, CAR_MAX_REVERSE_SPEED
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_BRAKE_DECELERATION, CAR_REVERSE_ACCELERATION, CAR_MAX_REVERSE_SPEED, CAR_TURN_SPEED
+
 )
 
 
@@ -17,8 +18,10 @@ class Car:
     def accelerate(self) -> None:
         self.speed += CAR_ACCELERATION
 
-    def update_position(self) -> None:
-        self.y += self.speed
+    def update_position(self) -> None:    # the car has un mouvement trigonometrique
+        rad = math.radians(self.angle)
+        self.x += self.speed * math.cos(rad) #cos is the horizontal position of the car
+        self.y -= self.speed * math.sin(rad) #sin is vertically
 
     def build_sprite(self) -> pygame.Surface:
         surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)
@@ -27,7 +30,7 @@ class Car:
         return surf
 
     def get_rotated_sprite(self) -> tuple[pygame.Surface, pygame.Rect]:
-        rotated = pygame.transform.rotate(self.sprite, -self.angle)
+        rotated = pygame.transform.rotate(self.sprite, self.angle - 90) #90 parce que l'avant de la voiture est pointé vers le haut ( de base ), mtn elle a la meme direction que le mouvement
         rect = rotated.get_rect(center=(int(self.x), int(self.y)))
         return rotated, rect
 
@@ -37,3 +40,15 @@ class Car:
             self.speed = max(0.0, self.speed - CAR_BRAKE_DECELERATION)
         else:
             self.speed = max(-CAR_MAX_REVERSE_SPEED, self.speed - CAR_REVERSE_ACCELERATION)
+
+    def turn_left(self) -> None:   #la tourne a gauche augmente l'angle
+        if self.speed > 0: 
+            self.angle += CAR_TURN_SPEED
+        elif self.speed < 0:
+            self.angle -= CAR_TURN_SPEED
+
+    def turn_right(self) -> None: #la tourne à droite diminue l'angle
+        if self.speed > 0:
+            self.angle -= CAR_TURN_SPEED
+        elif self.speed < 0:
+            self.angle += CAR_TURN_SPEED
