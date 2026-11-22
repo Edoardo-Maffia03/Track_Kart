@@ -20,7 +20,7 @@ class GameModel:
     def spawn_car(self) -> None:
         self.car = Car(7, 1)
 
-    def update(self) -> None:
+    def update(self, dt: float) -> None:
         if self.state != GameState.RACING or self.circuit is None:
             return
-        self.car.update_position()
+        self.car.update_position(dt)
