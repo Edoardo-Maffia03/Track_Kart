@@ -52,3 +52,4 @@ class Car:
             self.angle -= CAR_TURN_SPEED
         elif self.speed < 0:
             self.angle += CAR_TURN_SPEED
+            
