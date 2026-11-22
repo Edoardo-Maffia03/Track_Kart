@@ -1,7 +1,8 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_BRAKE_DECELERATION, CAR_REVERSE_ACCELERATION, CAR_MAX_REVERSE_SPEED, CAR_TURN_SPEED
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_BRAKE_DECELERATION, 
+    CAR_REVERSE_ACCELERATION, CAR_MAX_REVERSE_SPEED, CAR_TURN_SPEED, CAR_AIR_FRICTION
 
 )
 
@@ -18,7 +19,13 @@ class Car:
     def accelerate(self) -> None:
         self.speed += CAR_ACCELERATION
 
+    def apply_air_friction(self) -> None:
+        self.speed *= CAR_AIR_FRICTION #we multiply the speed by 0.98 to slow down the car.
+        if abs(self.speed) < 0.01: 
+            self.speed = 0
+
     def update_position(self) -> None:    # the car has un mouvement trigonometrique
+        self.apply_air_friction()
         rad = math.radians(self.angle)
         self.x += self.speed * math.cos(rad) #cos is the horizontal position of the car
         self.y -= self.speed * math.sin(rad) #sin is vertically
@@ -52,4 +59,3 @@ class Car:
             self.angle -= CAR_TURN_SPEED
         elif self.speed < 0:
             self.angle += CAR_TURN_SPEED
-            
