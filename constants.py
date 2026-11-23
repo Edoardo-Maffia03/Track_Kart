@@ -24,6 +24,9 @@ DEFAULT_GRIP_ALIGN = 0.25       # réalignement rapide hors dérapage
 DEFAULT_DRIFT_ALIGN = 0.06      # réalignement lent en dérapage (glisse visible)
 DEFAULT_DRIFT_FRICTION = 0.025  # frottement supplémentaire en dérapage
 
+# Blocs
+BOOST_SPEED = 3.0  # vitesse ajoutée par un boost
+
 
 class GameState:
     MENU = "menu"
@@ -38,3 +41,5 @@ COLOR_PANEL = (30, 30, 50)
 COLOR_PANEL_BORDER = (60, 60, 100)
 COLOR_PLAYER_1 = (235, 65, 65)
 COLOR_PLAYER_2 = (65, 145, 245)
+COLOR_BLOCK_START = (110, 110, 120)
+COLOR_BLOCK_BOOST = (240, 160, 40)
