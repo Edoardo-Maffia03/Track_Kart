@@ -6,8 +6,12 @@ from constants import (
     GameState,
 )
 from model.car import Car
-from model.circuit import Circuit
+from model.circuit import Circuit, CIRCUIT_1
 from model.road_tile import RoadTile
+from model.grass_tile import GrassTile
+from model.ice_tile import IceTile
+from model.dirt_tile import DirtTile
+from model.void_tile import VoidTile
 
 
 class GameModel:
@@ -18,12 +22,23 @@ class GameModel:
         self.cars: list[Car] = []
 
     def load_circuit(self) -> None:
-        grid = [
-            [RoadTile(col=col_idx, row=row_idx) for col_idx in range(GRID_COLS)]
-            for row_idx in range(GRID_ROWS)
-        ]
+        grid = []
+        for row, line in enumerate(CIRCUIT_1):
+            grid_row = []
+            for col, letter in enumerate(line):
+                if letter == "R":
+                    grid_row.append(RoadTile(col, row))
+                elif letter == "G":
+                    grid_row.append(GrassTile(col, row))
+                elif letter == "I":
+                    grid_row.append(IceTile(col, row))
+                elif letter == "D":
+                    grid_row.append(DirtTile(col, row))
+                elif letter == "V":
+                    grid_row.append(VoidTile(col, row))
+            grid.append(grid_row)
         self.circuit = Circuit(grid=grid)
-        self.spawn_cars()
+        self.spawn_car()
 
     def spawn_cars(self) -> None:
         """Instancie les deux voitures sur leurs cases de départ."""
