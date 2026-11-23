@@ -16,12 +16,21 @@ from constants import (
     DEFAULT_GRIP_ALIGN,
     ROLLING_FRICTION,
     TILE_SIZE,
+    COLOR_PLAYER_1,
 )
 
 
 class Car:
 
-    def __init__(self, start_col: int, start_row: int):
+    def __init__(
+        self,
+        start_col: int,
+        start_row: int,
+        player_id: int = 1,
+        color: tuple[int, int, int] = COLOR_PLAYER_1,
+    ):
+        self.player_id = player_id
+        self.color = color
         self.x = start_col * TILE_SIZE + TILE_SIZE // 2
         self.y = start_row * TILE_SIZE + TILE_SIZE // 2
         self.speed: float = 0.0
@@ -77,7 +86,7 @@ class Car:
 
     def build_sprite(self) -> pygame.Surface:
         surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)
-        pygame.draw.rect(surf, (255, 0, 0), (0, 0, CAR_WIDTH,
+        pygame.draw.rect(surf, self.color, (0, 0, CAR_WIDTH,
                          CAR_HEIGHT), border_radius=5)
         return surf
 
