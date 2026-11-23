@@ -38,6 +38,8 @@ class Car:
         self.velocity_angle: float = 0.0
         self.is_drifting: bool = False
         self.current_tile = None  # case où se trouve la voiture
+        self.checkpoints_passed: set[int] = set()  # checkpoints passés pendant ce tour
+        self.last_checkpoint: tuple[int, int] | None = None  # (col, row) du dernier checkpoint
         self.sprite = self.build_sprite()
 
     def accelerate(self) -> None:

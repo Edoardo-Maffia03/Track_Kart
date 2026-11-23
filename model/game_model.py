@@ -5,7 +5,7 @@ from constants import (
     GRID_ROWS,
     GameState,
 )
-from model.block import BoostBlock, StartBlock
+from model.block import BoostBlock, CheckpointBlock, StartBlock
 from model.car import Car
 from model.circuit import Circuit
 from model.road_tile import RoadTile
@@ -28,6 +28,10 @@ class GameModel:
         grid[2][7].block = StartBlock(7, 2, player_id=2)
         grid[1][11].block = BoostBlock(11, 1)
         grid[2][11].block = BoostBlock(11, 2)
+        grid[5][13].block = CheckpointBlock(13, 5, index=1)
+        grid[5][14].block = CheckpointBlock(14, 5, index=1)
+        grid[6][1].block = CheckpointBlock(1, 6, index=2)
+        grid[6][2].block = CheckpointBlock(2, 6, index=2)
 
         self.circuit = Circuit(grid=grid)
         self.spawn_cars()
