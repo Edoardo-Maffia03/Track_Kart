@@ -38,7 +38,7 @@ class GameModel:
                     grid_row.append(VoidTile(col, row))
             grid.append(grid_row)
         self.circuit = Circuit(grid=grid)
-        self.spawn_car()
+        self.spawn_cars()
 
     def spawn_cars(self) -> None:
         """Instancie les deux voitures sur leurs cases de départ."""
