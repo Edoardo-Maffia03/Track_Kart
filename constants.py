@@ -15,6 +15,15 @@ CAR_REVERSE_ACCELERATION = 0.04
 CAR_MAX_REVERSE_SPEED = 2.5
 CAR_TURN_SPEED = 3.0 
 
+# Frottements de l'air et paramètres de dérapage (route)
+AIR_FRICTION = 0.0018
+ROLLING_FRICTION = 0.004
+CAR_STOP_SPEED = 0.02
+DEFAULT_DRIFT_THRESHOLD = 32.0  # seuil de dérapage
+DEFAULT_GRIP_ALIGN = 0.25       # réalignement rapide hors dérapage
+DEFAULT_DRIFT_ALIGN = 0.06      # réalignement lent en dérapage (glisse visible)
+DEFAULT_DRIFT_FRICTION = 0.025  # frottement supplémentaire en dérapage
+
 
 class GameState:
     MENU = "menu"
