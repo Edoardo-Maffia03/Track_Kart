@@ -4,6 +4,7 @@ from constants import (
     BOOST_SPEED,
     COLOR_BLOCK_BOOST,
     COLOR_BLOCK_CHECKPOINT,
+    COLOR_BLOCK_FINISH,
     COLOR_BLOCK_START,
 )
 
@@ -64,3 +65,19 @@ class CheckpointBlock(Block):
     def on_car_enter(self, car) -> None:
         car.checkpoints_passed.add(self.index)
         car.last_checkpoint = (self.col, self.row)
+
+
+class FinishLineBlock(Block):
+    """Ligne d'arrivée : compte un tour si tous les checkpoints sont passés."""
+
+    color = COLOR_BLOCK_FINISH
+    label = "L"
+
+    def __init__(self, col: int, row: int, checkpoint_count: int):
+        super().__init__(col, row)
+        self.checkpoint_count = checkpoint_count
+
+    def on_car_enter(self, car) -> None:
+        if len(car.checkpoints_passed) == self.checkpoint_count:
+            car.laps += 1
+            car.checkpoints_passed.clear()

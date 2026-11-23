@@ -5,7 +5,7 @@ from constants import (
     GRID_ROWS,
     GameState,
 )
-from model.block import BoostBlock, CheckpointBlock, StartBlock
+from model.block import BoostBlock, CheckpointBlock, FinishLineBlock, StartBlock
 from model.car import Car
 from model.circuit import Circuit
 from model.road_tile import RoadTile
@@ -17,6 +17,7 @@ class GameModel:
         self.state: str = GameState.MENU
         self.circuit: Circuit | None = None
         self.cars: list[Car] = []
+        self.winner: Car | None = None
 
     def load_circuit(self) -> None:
         grid = [
@@ -32,8 +33,11 @@ class GameModel:
         grid[5][14].block = CheckpointBlock(14, 5, index=1)
         grid[6][1].block = CheckpointBlock(1, 6, index=2)
         grid[6][2].block = CheckpointBlock(2, 6, index=2)
+        grid[1][6].block = FinishLineBlock(6, 1, checkpoint_count=2)
+        grid[2][6].block = FinishLineBlock(6, 2, checkpoint_count=2)
 
         self.circuit = Circuit(grid=grid)
+        self.winner = None
         self.spawn_cars()
 
     def spawn_cars(self) -> None:
@@ -52,6 +56,8 @@ class GameModel:
         for car in self.cars:
             car.update_position()
             self.check_tile(car)
+            if self.winner is None and car.laps >= self.circuit.laps_required:
+                self.winner = car
 
     def check_tile(self, car: Car) -> None:
         """Active le bloc de la case seulement quand la voiture vient d'y entrer."""

@@ -1,12 +1,13 @@
 from model.block import StartBlock
 from model.road_tile import RoadTile
-from constants import TILE_SIZE
+from constants import DEFAULT_LAPS, TILE_SIZE
 
 
 class Circuit:
 
-    def __init__(self,  grid: list[list[RoadTile]]):
+    def __init__(self, grid: list[list[RoadTile]], laps_required: int = DEFAULT_LAPS):
         self.grid = grid
+        self.laps_required = laps_required
         self.rows = len(grid)
         self.cols = len(grid[0]) if grid else 0
 
