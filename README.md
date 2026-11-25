@@ -26,5 +26,5 @@ python main.py
 ## Contributeurs et contributrices
 
 - MAFFIA Edaordo
-- ... Yasmine
+- CHATAWI Yasmine
 - ... Kyrylo
