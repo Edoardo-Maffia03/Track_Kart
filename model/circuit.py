@@ -1,16 +1,18 @@
+from model.block import StartBlock
 from model.road_tile import RoadTile
 from model.grass_tile import GrassTile
 from model.ice_tile import IceTile
 from model.dirt_tile import DirtTile
 from model.void_tile import VoidTile
 Tile=RoadTile|GrassTile|DirtTile|VoidTile|IceTile
-from constants import TILE_SIZE
+from constants import DEFAULT_LAPS, TILE_SIZE
 
 
 class Circuit:
 
-    def __init__(self,  grid: list[list[Tile]]):
+    def __init__(self, grid: list[list[Tile]], laps_required: int = DEFAULT_LAPS):
         self.grid = grid
+        self.laps_required = laps_required
         self.rows = len(grid)
         self.cols = len(grid[0]) if grid else 0
 
@@ -23,6 +25,14 @@ class Circuit:
         col = int(px // TILE_SIZE)
         row = int(py // TILE_SIZE)
         return self.get_tile(col, row)
+
+    def get_start_block(self, player_id: int) -> StartBlock | None:
+        """Renvoie le bloc de départ du joueur, ou None s'il n'y en a pas."""
+        for row in self.grid:
+            for tile in row:
+                if isinstance(tile.block, StartBlock) and tile.block.player_id == player_id:
+                    return tile.block
+        return None
 
     def pixel_width(self) -> int:
         return self.cols * TILE_SIZE

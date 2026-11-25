@@ -7,6 +7,7 @@ class VoidTile:
     def __init__(self, col: int, row: int):  #on initialise chaque case
         self.col = col
         self.row = row
+        self.block = None  # bloc posé sur la case (départ, boost, ...)
         self.sprite: pygame.Surface | None = None
 
     def get_sprite(self, tile_size: int = TILE_SIZE) -> pygame.Surface:  #pour obtenir l'image de la case

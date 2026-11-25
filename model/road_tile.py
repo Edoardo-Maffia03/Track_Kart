@@ -1,12 +1,14 @@
 import pygame
 from constants import TILE_SIZE
+from model.block import Block
 #tile size is 64 which means chaque case mesure 64x64 pixels
 #class RoadTile represente une seule case du circuit
 class RoadTile:
 
-    def __init__(self, col: int, row: int):  #on initialise chaque case
+    def __init__(self, col: int, row: int, block: Block | None = None):  #on initialise chaque case
         self.col = col
         self.row = row
+        self.block = block
         self.sprite: pygame.Surface | None = None
 
     def get_sprite(self, tile_size: int = TILE_SIZE) -> pygame.Surface:  #pour obtenir l'image de la case

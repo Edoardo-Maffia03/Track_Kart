@@ -41,17 +41,25 @@ class GameView:
             self.screen.blit(text_surf, text_surf.get_rect(center=rect.center))
 
     def _draw_racing(self, model: GameModel) -> None:
+        if model.circuit is None:
+            return
 
         for row_idx, row in enumerate(model.circuit.grid):
             for col_idx, tile in enumerate(row):
-                sprite = tile.get_sprite(TILE_SIZE)
-                self.screen.blit(
-                    sprite, (col_idx * TILE_SIZE, row_idx * TILE_SIZE))
+                x, y = col_idx * TILE_SIZE, row_idx * TILE_SIZE
+                self.screen.blit(tile.get_sprite(TILE_SIZE), (x, y))
+                if tile.block is not None:
+                    self._draw_block(tile.block, x, y)
 
-        if model.circuit is None:
-            return
         for car in model.cars:
             surf, rect = car.get_rotated_sprite()
             self.screen.blit(surf, rect)
+
+    def _draw_block(self, block, x: int, y: int) -> None:
+        """Dessine un bloc : un carré de couleur avec sa lettre."""
+        rect = pygame.Rect(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8)
+        pygame.draw.rect(self.screen, block.color, rect, border_radius=6)
+        text = self.font.render(block.label, True, COLOR_TEXT)
+        self.screen.blit(text, text.get_rect(center=rect.center))
             
         
