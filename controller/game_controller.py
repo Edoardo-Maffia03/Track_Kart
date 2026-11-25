@@ -32,14 +32,48 @@ class GameController:
                 self.quit()
 
             elif event.type == pygame.KEYDOWN:
-                self.handle_keydown(event.key)
+                self.handle_keydown(event)
 
-    def handle_keydown(self, key: int) -> None:
+            elif event.type == pygame.MOUSEBUTTONDOWN: #check if the event is a click
+                print("Click detected:", event.pos)
+                if self.model.state == GameState.MENU: #check if we are in the menu (not in the game for example)
+                    x, y = event.pos #get the click positio,
+                    cx = WINDOW_WIDTH // 2 #here we are at the center of our window
+                    self.model.input = 0  # by default, no clicks
+
+
+
+                    if 140 <= x <= 440 and 370 <= y <= 425:
+                        self.model.input = 1
+
+                    elif 584 <= x <= 884 and 370 <= y <= 425:
+                        self.model.input = 2
+
+            
+
+    def handle_keydown(self, event) -> None:
 
         state = self.model.state
 
         if state == GameState.MENU:
-            self.handle_menu_key(key)
+            if self.model.input == 1:  # Player 1 selected
+                if event.key == pygame.K_BACKSPACE:
+                    self.model.player1_name = self.model.player1_name[:-1]  # Delete last letter if i press backspace
+                elif event.key == pygame.K_RETURN:
+                    self.model.input = 0  # Finish typing
+                elif event.unicode.isprintable():
+                    self.model.player1_name += event.unicode  # Add letter
+            elif self.model.input == 2:  # Player 2 selected
+                if event.key == pygame.K_BACKSPACE:
+                    self.model.player2_name = self.model.player2_name[:-1]
+                elif event.key == pygame.K_RETURN:
+                    self.model.input = 0
+                elif event.unicode.isprintable():
+                    self.model.player2_name += event.unicode
+            else:
+                self.handle_menu_key(event.key)
+
+
 
     def handle_menu_key(self, key: int) -> None:
         if key == pygame.K_RETURN:

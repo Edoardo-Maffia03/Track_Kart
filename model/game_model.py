@@ -22,6 +22,9 @@ class GameModel:
         self.circuit: Circuit | None = None
         self.cars: list[Car] = []
         self.winner: Car | None = None
+        self.player1_name = ""
+        self.player2_name = ""
+        self.input = 0
 
     def load_circuit(self) -> None:
         grid = []

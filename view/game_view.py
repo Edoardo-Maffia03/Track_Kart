@@ -23,22 +23,53 @@ class GameView:
 
     def _draw_menu(self, model: GameModel) -> None:
         cx = WINDOW_WIDTH // 2
+        pygame.draw.rect(self.screen, (180, 55, 75),
+                 (0, 0, WINDOW_WIDTH // 2, WINDOW_HEIGHT))
+        pygame.draw.rect(self.screen, (45, 95, 175),
+                 (WINDOW_WIDTH // 2, 0, WINDOW_WIDTH // 2, WINDOW_HEIGHT)) 
+        pygame.draw.rect(self.screen, (45, 95, 175), #player 1 
+                 (100, 260, 380, 280), border_radius=15)
+        
+        pygame.draw.rect(self.screen, (180, 55, 75), #player 2
+                 (544, 260, 380, 280), border_radius=15)
 
         title_surf = self.font.render(
             "Jeu de course 2D", True, COLOR_ACCENT)
         self.screen.blit(title_surf, title_surf.get_rect(center=(cx, 160)))
 
-        options = [("JOUER (Enter)", GameState.RACING),
-                   ("QUITTER (Escape)", None)]
+        options = [
+            ("PLAYER 1 : " + model.player1_name, None),
+            ("PLAYER 2 : " + model.player2_name, None),
+            ("CIRCUIT : 1", None),
+            ("START RACE (Enter)", GameState.RACING),
+            ("QUIT", None)
+]
+        
         for i, (label, _) in enumerate(options):
-            y = 320 + i * 80
-            rect = pygame.Rect(cx - 140, y - 25, 280, 50)
+            if i == 0:  # Player 1
+                rect = pygame.Rect(140, 370, 300, 55)
+
+            elif i == 1:  # Player 2
+                rect = pygame.Rect(584, 370, 300, 55)
+
+            elif i == 2:  # Circuit
+                rect = pygame.Rect(cx - 150, 200, 300, 50)
+
+            elif i == 3:  # Start Race
+                rect = pygame.Rect(cx - 150, 590, 300, 60)
+
+            else:  # Quit
+                rect = pygame.Rect(cx - 100, 680, 200, 50)
+            # Draw button
             pygame.draw.rect(self.screen, COLOR_PANEL, rect, border_radius=8)
-            pygame.draw.rect(self.screen, COLOR_PANEL_BORDER,
-                             rect, 2, border_radius=8)
-            text_surf = self.font.render(
-                label, True, COLOR_ACCENT if i == 0 else COLOR_TEXT)
-            self.screen.blit(text_surf, text_surf.get_rect(center=rect.center))
+
+            # Yellow border for selected player
+            if model.input == i + 1 and i < 2:
+                pygame.draw.rect(self.screen, COLOR_ACCENT, rect, 3)
+
+            # Display text
+            text = self.font.render(label, True, COLOR_TEXT)
+            self.screen.blit(text, text.get_rect(center=rect.center))
 
     def _draw_racing(self, model: GameModel) -> None:
         if model.circuit is None:
