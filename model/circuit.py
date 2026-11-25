@@ -1,22 +1,27 @@
 from model.block import StartBlock
 from model.road_tile import RoadTile
+from model.grass_tile import GrassTile
+from model.ice_tile import IceTile
+from model.dirt_tile import DirtTile
+from model.void_tile import VoidTile
+Tile=RoadTile|GrassTile|DirtTile|VoidTile|IceTile
 from constants import DEFAULT_LAPS, TILE_SIZE
 
 
 class Circuit:
 
-    def __init__(self, grid: list[list[RoadTile]], laps_required: int = DEFAULT_LAPS):
+    def __init__(self, grid: list[list[Tile]], laps_required: int = DEFAULT_LAPS):
         self.grid = grid
         self.laps_required = laps_required
         self.rows = len(grid)
         self.cols = len(grid[0]) if grid else 0
 
-    def get_tile(self, col: int, row: int) -> RoadTile | None:
+    def get_tile(self, col: int, row: int) -> Tile | None:
         if 0 <= row < self.rows and 0 <= col < self.cols:
             return self.grid[row][col]
         return None
 
-    def get_tile_at_pixel(self, px: float, py: float) -> RoadTile | None:
+    def get_tile_at_pixel(self, px: float, py: float) -> Tile | None:
         col = int(px // TILE_SIZE)
         row = int(py // TILE_SIZE)
         return self.get_tile(col, row)
@@ -34,3 +39,21 @@ class Circuit:
 
     def pixel_height(self) -> int:
         return self.rows * TILE_SIZE
+
+    
+
+CIRCUIT_1 = [
+"GGGGGGGGGGGGGGGG",
+"GGRRRRRRRRRRRRGG",
+"GRRRRRRRRRRRRRRG",
+"GRRGGGGGGGGGGIIG",
+"GRRGVVGGGGGGGIIG",
+"GRRGVVGGIIIIIIIG",
+"GRRGGGGGIIIIIIGG",
+"GRRGGGGGRRGGGGGG",
+"GRRGGVVGRRGGVVGG",
+"GRRDDDDDDDGGGGGG",
+"GGRDDDDDDDGGVVGG",
+"GGGGGGGGGGGGGGGG",
+]
+

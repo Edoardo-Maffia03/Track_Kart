@@ -7,8 +7,12 @@ from constants import (
 )
 from model.block import BoostBlock, CheckpointBlock, FinishLineBlock, StartBlock
 from model.car import Car
-from model.circuit import Circuit
+from model.circuit import Circuit, CIRCUIT_1
 from model.road_tile import RoadTile
+from model.grass_tile import GrassTile
+from model.ice_tile import IceTile
+from model.dirt_tile import DirtTile
+from model.void_tile import VoidTile
 
 
 class GameModel:
@@ -20,21 +24,34 @@ class GameModel:
         self.winner: Car | None = None
 
     def load_circuit(self) -> None:
-        grid = [
-            [RoadTile(col=col_idx, row=row_idx) for col_idx in range(GRID_COLS)]
-            for row_idx in range(GRID_ROWS)
-        ]
-        # Circuit de test en attendant le chargement depuis un fichier
-        grid[1][7].block = StartBlock(7, 1, player_id=1)
-        grid[2][7].block = StartBlock(7, 2, player_id=2)
-        grid[1][11].block = BoostBlock(11, 1)
-        grid[2][11].block = BoostBlock(11, 2)
-        grid[5][13].block = CheckpointBlock(13, 5, index=1)
-        grid[5][14].block = CheckpointBlock(14, 5, index=1)
-        grid[6][1].block = CheckpointBlock(1, 6, index=2)
-        grid[6][2].block = CheckpointBlock(2, 6, index=2)
-        grid[1][6].block = FinishLineBlock(6, 1, checkpoint_count=2)
-        grid[2][6].block = FinishLineBlock(6, 2, checkpoint_count=2)
+        grid = []
+        for row, line in enumerate(CIRCUIT_1):
+            grid_row = []
+            for col, letter in enumerate(line):
+                if letter == "R":
+                    grid_row.append(RoadTile(col, row))
+                elif letter == "G":
+                    grid_row.append(GrassTile(col, row))
+                elif letter == "I":
+                    grid_row.append(IceTile(col, row))
+                elif letter == "D":
+                    grid_row.append(DirtTile(col, row))
+                elif letter == "V":
+                    grid_row.append(VoidTile(col, row))
+            grid.append(grid_row)
+        # Blocs placés à la main sur CIRCUIT_1 (en attendant une grille de blocs)
+        grid[1][4].block = StartBlock(4, 1, player_id=1)
+        grid[2][4].block = StartBlock(4, 2, player_id=2)
+        grid[1][3].block = FinishLineBlock(3, 1, checkpoint_count=3)
+        grid[2][3].block = FinishLineBlock(3, 2, checkpoint_count=3)
+        grid[1][9].block = BoostBlock(9, 1)
+        grid[2][9].block = BoostBlock(9, 2)
+        grid[3][13].block = CheckpointBlock(13, 3, index=1)
+        grid[3][14].block = CheckpointBlock(14, 3, index=1)
+        grid[7][8].block = CheckpointBlock(8, 7, index=2)
+        grid[7][9].block = CheckpointBlock(9, 7, index=2)
+        grid[6][1].block = CheckpointBlock(1, 6, index=3)
+        grid[6][2].block = CheckpointBlock(2, 6, index=3)
 
         self.circuit = Circuit(grid=grid)
         self.winner = None
